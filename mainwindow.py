@@ -1,8 +1,10 @@
-from PySide2.QtWidgets import QMainWindow,QFileDialog, QMessageBox,QTableWidgetItem, QMessageBox
+from PySide2.QtWidgets import QMainWindow,QFileDialog, QMessageBox,QTableWidgetItem, QMessageBox, QGraphicsScene
 from PySide2.QtCore import Slot
-from ui_mainwindow import Ui_MainWindow
+from ui_mainwindow import Ui_MainWindow 
+from PySide2.QtGui import QPen, QColor, QTransform
 from particula import Particula
 from admin_particulas import Admin
+from random import randint
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -22,6 +24,46 @@ class MainWindow(QMainWindow):
 
         self.ui.mostrar_tabla_pushButton.clicked.connect(self.mostrar_tabla)
         self.ui.buscar_pushButton.clicked.connect(self.buscar_id)
+
+#Botones
+        self.ui.dibujar.clicked.connect(self.dibujar)
+        self.ui.limpiar.clicked.connect(self.limpiar)
+#Declaracion de objeto escena
+        self.scene = QGraphicsScene()
+        self.ui.graphicsView.setScene(self.scene)
+
+    @Slot()
+    def dibujar(self):
+        pen = QPen()
+        pen.setWidth(2)
+        for particula in self.admin:
+            r = particula.red
+            g = particula.green
+            b = particula.blue
+            color = QColor(r,g,b)
+            pen.setColor(color)
+
+            x_origen = particula.origen_x
+            y_origen = particula.origen_y 
+            x_destino = particula.destino_x
+            y_destino = particula.destino_y
+
+            #Origen (0,0)
+            self.scene.addEllipse(x_origen,y_origen,6,6,pen)   #(x,y,diametro1,diametro2)
+            self.scene.addEllipse(x_destino,y_destino,6,6,pen)
+            self.scene.addLine(x_origen+3,y_origen+3,x_destino+3,y_destino+3,pen)
+
+    @Slot()
+    def limpiar(self):
+        self.scene.clear()
+
+    #Zoom
+    def wheelEvent(self,event):
+        #print(event.delta())
+        if event.delta() > 0:
+            self.ui.graphicsView.scale(1.2,1.2)
+        else:
+            self.ui.graphicsView.scale(0.8,0.8)
 
     @Slot()
     def buscar_id(self):
