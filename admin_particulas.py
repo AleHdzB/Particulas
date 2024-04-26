@@ -4,6 +4,14 @@ import json
 class Admin:
     def __init__(self):
         self.__particulas = []
+    def ordenar_particulas_por_id(self):
+        self.__particulas.sort(key=lambda p: p.id)
+
+    def ordenar_particulas_por_velocidad(self):
+        self.__particulas.sort(key=lambda p: p.velocidad)
+
+    def ordenar_particulas_por_distancia(self):
+        self.__particulas.sort(key=lambda p: p.distancia,reverse=True)
 
     def agregar_inicio(self, particula:Particula):
         self.__particulas.insert(0,particula)

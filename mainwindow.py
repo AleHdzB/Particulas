@@ -14,7 +14,10 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         self.admin = Admin()
-
+        #Declaracion de objeto escena
+        self.scene = QGraphicsScene()
+        self.ui.graphicsView.setScene(self.scene)
+        #Botones
         self.ui.pushButton_agregar_inicio.clicked.connect(self.click_agregar_inicio)
         self.ui.pushButton_agregar_final.clicked.connect(self.click_agregar_final)
         self.ui.pushButton_mostrar.clicked.connect(self.click_mostrar)
@@ -25,12 +28,54 @@ class MainWindow(QMainWindow):
         self.ui.mostrar_tabla_pushButton.clicked.connect(self.mostrar_tabla)
         self.ui.buscar_pushButton.clicked.connect(self.buscar_id)
 
-#Botones
+
         self.ui.dibujar.clicked.connect(self.dibujar)
         self.ui.limpiar.clicked.connect(self.limpiar)
-#Declaracion de objeto escena
-        self.scene = QGraphicsScene()
-        self.ui.graphicsView.setScene(self.scene)
+        #Mostrar ordenadas (Sort)
+        self.ui.pushButton_ID.clicked.connect(self.ordenar_id_ascendente_qplantextedit)
+        self.ui.pushButton_ID_2.clicked.connect(self.ordenar_id_ascendente_qtablewidget)
+
+        self.ui.pushButton_DISTANCIA.clicked.connect(self.ordenar_distancia_qplanedit)
+        self.ui.pushButton_DISTANCIA_2.clicked.connect(self.ordenar_distancia_qtablewidget)
+
+        self.ui.pushButton_VELOCIDAD.clicked.connect(self.ordenar_velocidad_qplanedit)
+        self.ui.pushButton_VELOCIDAD_2.clicked.connect(self.ordenar_velocidad_qtablewidget)
+        
+    #Mostrar ordenadas en QplanTexEdit(Sort)
+    @Slot()
+    def ordenar_id_ascendente_qplantextedit(self):
+        self.admin.ordenar_particulas_por_id()
+        self.ui.salida.clear()
+        self.ui.salida.insertPlainText(str(self.admin))
+
+    @Slot()
+    def ordenar_distancia_qplanedit(self):
+        self.admin.ordenar_particulas_por_distancia()
+        self.ui.salida.clear()
+        self.ui.salida.insertPlainText(str(self.admin))
+
+    @Slot()
+    def ordenar_velocidad_qplanedit(self):
+        self.admin.ordenar_particulas_por_velocidad()
+        self.ui.salida.clear()
+        self.ui.salida.insertPlainText(str(self.admin))
+
+    #Mostrar ordenadas en QTableWidget(Sort)
+    @Slot()
+    def ordenar_id_ascendente_qtablewidget(self):
+        self.admin.ordenar_particulas_por_id()
+        self.mostrar_tabla()
+    @Slot()
+    def ordenar_distancia_qtablewidget(self):
+        self.admin.ordenar_particulas_por_distancia()
+        self.mostrar_tabla()
+        
+    @Slot()
+    def ordenar_velocidad_qtablewidget(self):
+        self.admin.ordenar_particulas_por_velocidad()
+        self.mostrar_tabla()
+
+
 
     @Slot()
     def dibujar(self):
@@ -113,7 +158,6 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def mostrar_tabla(self):
-        #print('Mostrar tabla')
         self.ui.tabla.setColumnCount(10) #Config. numero de columnas
         headers = ["ID","ORIGEN_X","ORIGEN_Y","DESTINO_X","DESTINO_Y","VELOCIDAD","RED",
                    "BLUE","GREEN","DISTANCIA"]
