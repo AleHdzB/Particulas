@@ -322,6 +322,11 @@
           </item>
           <item>
            <property name="text">
+            <string>GRAFO</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
             <string>Puntos</string>
            </property>
           </item>

@@ -7,6 +7,7 @@ from admin_particulas import Admin
 from random import randint
 from pprint import pprint
 from algoritmos import *
+from grafo import Grafo
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -85,17 +86,45 @@ class MainWindow(QMainWindow):
                         color = QColor(r,g,b)
                         pen.setColor(color)  
                         self.scene.addEllipse(x,y,6,6,pen)   #(x,y,diametro1,diametro2)
+#------------------------------Mostrar GRAFO------------------------------------------                          
+        elif(algoritmo == "GRAFO"):
+             grafo = Grafo()
+             grafo.agregar_vertices_de_particulas(self.admin)
+             grafo.agregar_aristas_entre_particulas(self.admin)
+             print(grafo)
+             pen = QPen()
+             pen.setWidth(1)
+
+            # Dibujar vértices
+             for vertice in grafo.obtener_vertices():
+                     x = vertice[0]
+                     y = vertice[1]
+                     self.scene.addEllipse(x, y, 6, 6, pen)
+
+             # Dibujar aristas
+             for vertice, aristas in grafo.vertices.items():
+                     for arista in aristas:
+                        destino = arista[0]
+                        x1, y1 = vertice
+                        x2, y2 = destino
+                        self.scene.addLine(x1+3, y1+3, x2+3, y2+3, pen)
 
 #------------------------------FUERZA BRUTA--------------------------------------------        
         elif(algoritmo == "Fuerza Bruta"):
                 resultado = fuerza_bruta(self.puntos)
+                pen = QPen()
+                pen.setWidth(3)
                 for punto1, punto2 in resultado:
                         x1 = punto1[0]
                         y1 = punto1[1]
                         x2 = punto2[0]
                         y2 = punto2[1]
-
-                        self.scene.addLine(x1+3,y1+3,x2+3,y2+3)        
+                        r = 255
+                        g = 0
+                        b = 0
+                        color = QColor(r,g,b)
+                        pen.setColor(color)
+                        self.scene.addLine(x1+3,y1+3,x2+3,y2+3,pen)        
 #------------------------------Dijkstra--------------------------------------------                           
         elif(algoritmo == "Dijstra"):
                 print("Dijkstra")
