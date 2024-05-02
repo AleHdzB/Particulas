@@ -219,24 +219,55 @@ class Ui_MainWindow(object):
         self.tab.setObjectName(u"tab")
         self.gridLayout_4 = QGridLayout(self.tab)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_4.addItem(self.horizontalSpacer, 1, 4, 1, 1)
+
         self.graphicsView = QGraphicsView(self.tab)
         self.graphicsView.setObjectName(u"graphicsView")
 
-        self.gridLayout_4.addWidget(self.graphicsView, 0, 0, 1, 2)
+        self.gridLayout_4.addWidget(self.graphicsView, 0, 0, 1, 8)
+
+        self.spinBox = QSpinBox(self.tab)
+        self.spinBox.setObjectName(u"spinBox")
+        self.spinBox.setMaximum(1000)
+
+        self.gridLayout_4.addWidget(self.spinBox, 1, 1, 1, 1)
 
         self.dibujar = QPushButton(self.tab)
         self.dibujar.setObjectName(u"dibujar")
 
-        self.gridLayout_4.addWidget(self.dibujar, 1, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.dibujar, 1, 6, 1, 1)
+
+        self.horizontalSlider = QSlider(self.tab)
+        self.horizontalSlider.setObjectName(u"horizontalSlider")
+        self.horizontalSlider.setMaximum(1000)
+        self.horizontalSlider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout_4.addWidget(self.horizontalSlider, 1, 2, 1, 1)
 
         self.limpiar = QPushButton(self.tab)
         self.limpiar.setObjectName(u"limpiar")
 
-        self.gridLayout_4.addWidget(self.limpiar, 1, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.limpiar, 1, 7, 1, 1)
+
+        self.comboBox = QComboBox(self.tab)
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.comboBox.setObjectName(u"comboBox")
+
+        self.gridLayout_4.addWidget(self.comboBox, 1, 5, 1, 1)
+
+        self.pushButton_agregar = QPushButton(self.tab)
+        self.pushButton_agregar.setObjectName(u"pushButton_agregar")
+
+        self.gridLayout_4.addWidget(self.pushButton_agregar, 1, 3, 1, 1)
 
         self.tabWidget.addTab(self.tab, "")
 
-        self.gridLayout.addWidget(self.tabWidget, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.tabWidget, 1, 1, 1, 1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
@@ -255,7 +286,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -294,6 +325,12 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), QCoreApplication.translate("MainWindow", u"Tabla", None))
         self.dibujar.setText(QCoreApplication.translate("MainWindow", u"Dibujar", None))
         self.limpiar.setText(QCoreApplication.translate("MainWindow", u"Limpiar", None))
+        self.comboBox.setItemText(0, QCoreApplication.translate("MainWindow", u"Graficar", None))
+        self.comboBox.setItemText(1, QCoreApplication.translate("MainWindow", u"Puntos", None))
+        self.comboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"Fuerza Bruta", None))
+        self.comboBox.setItemText(3, QCoreApplication.translate("MainWindow", u"Dijkstra", None))
+
+        self.pushButton_agregar.setText(QCoreApplication.translate("MainWindow", u"Agregar PARTICULAS", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Grafica", None))
         self.menuArchivo.setTitle(QCoreApplication.translate("MainWindow", u"Archivo", None))
     # retranslateUi

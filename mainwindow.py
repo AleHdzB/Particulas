@@ -5,6 +5,8 @@ from PySide2.QtGui import QPen, QColor, QTransform
 from particula import Particula
 from admin_particulas import Admin
 from random import randint
+from pprint import pprint
+from algoritmos import *
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -12,6 +14,8 @@ class MainWindow(QMainWindow):
 
         self.ui = Ui_MainWindow() 
         self.ui.setupUi(self)
+
+        self.puntos = []
 
         self.admin = Admin()
         #Declaracion de objeto escena
@@ -40,6 +44,79 @@ class MainWindow(QMainWindow):
 
         self.ui.pushButton_VELOCIDAD.clicked.connect(self.ordenar_velocidad_qplanedit)
         self.ui.pushButton_VELOCIDAD_2.clicked.connect(self.ordenar_velocidad_qtablewidget)
+
+
+#--------------------------------ALGORITMOS--------------------------------------------
+#------------------------------Agregar puntos------------------------------------------   
+        self.ui.spinBox.valueChanged[int].connect(self.spinBox_puntos)
+        self.ui.horizontalSlider.valueChanged[int].connect(self.slider_puntos)     
+        self.ui.pushButton_agregar.clicked.connect(self.agregar_puntos)
+
+    @Slot(int)
+    def agregar_puntos(self,n):
+        n = self.ui.spinBox.value()  # Obtener el valor del spinBox
+        for _ in range(n):
+                origen_x = randint(0, 500)
+                origen_y = randint(0, 500)
+                destino_x = randint(0, 500)
+                destino_y = randint(0, 500)
+                velocidad = randint(1, 10)
+                red = randint(0, 255)
+                green = randint(0, 255)
+                blue = randint(0, 255)
+                particula = Particula(origen_x, origen_y, destino_x, destino_y, velocidad, red, green, blue)
+                self.admin.agregar_inicio(particula)  
+    @Slot()
+    def dibujar(self):
+        algoritmo = self.ui.comboBox.currentText()
+        self.puntos = get_puntos(self.admin)
+        pen = QPen()
+        pen.setWidth(2)
+#------------------------------Mostrar puntos------------------------------------------   
+        if (algoritmo == "Puntos"):
+                pen = QPen()
+                pen.setWidth(2)          
+                for punto in self.puntos:
+                        x = punto[0]
+                        y = punto[1]
+                        r = punto[2]
+                        g = punto[3]
+                        b = punto[4]
+                        color = QColor(r,g,b)
+                        pen.setColor(color)  
+                        self.scene.addEllipse(x,y,6,6,pen)   #(x,y,diametro1,diametro2)
+
+#------------------------------FUERZA BRUTA--------------------------------------------        
+        elif(algoritmo == "Fuerza Bruta"):
+                resultado = fuerza_bruta(self.puntos)
+                for punto1, punto2 in resultado:
+                        x1 = punto1[0]
+                        y1 = punto1[1]
+                        x2 = punto2[0]
+                        y2 = punto2[1]
+
+                        self.scene.addLine(x1+3,y1+3,x2+3,y2+3)        
+#------------------------------Dijkstra--------------------------------------------                           
+        elif(algoritmo == "Dijstra"):
+                print("Dijkstra")
+        elif(algoritmo == "Graficar"):
+                for particula in self.admin:
+                        r = particula.red
+                        g = particula.green
+                        b = particula.blue
+                        color = QColor(r,g,b)
+                        pen.setColor(color)
+
+                        x_origen = particula.origen_x
+                        y_origen = particula.origen_y 
+                        x_destino = particula.destino_x
+                        y_destino = particula.destino_y
+
+                        #Origen (0,0)
+                        self.scene.addEllipse(x_origen,y_origen,6,6,pen)   #(x,y,diametro1,diametro2)
+                        self.scene.addEllipse(x_destino,y_destino,6,6,pen)
+                        self.scene.addLine(x_origen+3,y_origen+3,x_destino+3,y_destino+3,pen)
+
         
     #Mostrar ordenadas en QplanTexEdit(Sort)
     @Slot()
@@ -77,27 +154,15 @@ class MainWindow(QMainWindow):
 
 
 
-    @Slot()
-    def dibujar(self):
-        pen = QPen()
-        pen.setWidth(2)
-        for particula in self.admin:
-            r = particula.red
-            g = particula.green
-            b = particula.blue
-            color = QColor(r,g,b)
-            pen.setColor(color)
+    @Slot(int)
+    def spinBox_puntos(self, x):
+        #print(x)
+        self.ui.horizontalSlider.setValue(x)
 
-            x_origen = particula.origen_x
-            y_origen = particula.origen_y 
-            x_destino = particula.destino_x
-            y_destino = particula.destino_y
-
-            #Origen (0,0)
-            self.scene.addEllipse(x_origen,y_origen,6,6,pen)   #(x,y,diametro1,diametro2)
-            self.scene.addEllipse(x_destino,y_destino,6,6,pen)
-            self.scene.addLine(x_origen+3,y_origen+3,x_destino+3,y_destino+3,pen)
-
+    @Slot(int)
+    def slider_puntos(self, x):
+      #print(x)
+      self.ui.spinBox.setValue(x)
     @Slot()
     def limpiar(self):
         self.scene.clear()
