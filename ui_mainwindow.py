@@ -257,6 +257,7 @@ class Ui_MainWindow(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
+        self.comboBox.addItem("")
         self.comboBox.setObjectName(u"comboBox")
 
         self.gridLayout_4.addWidget(self.comboBox, 1, 5, 1, 1)
@@ -331,6 +332,7 @@ class Ui_MainWindow(object):
         self.comboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"Puntos", None))
         self.comboBox.setItemText(3, QCoreApplication.translate("MainWindow", u"Fuerza Bruta", None))
         self.comboBox.setItemText(4, QCoreApplication.translate("MainWindow", u"Dijkstra", None))
+        self.comboBox.setItemText(5, QCoreApplication.translate("MainWindow", u"Kruskal", None))
 
         self.pushButton_agregar.setText(QCoreApplication.translate("MainWindow", u"Agregar PARTICULAS", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Grafica", None))

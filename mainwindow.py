@@ -17,7 +17,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         self.puntos = []
-
+        self.grafo = Grafo()
         self.admin = Admin()
         #Declaracion de objeto escena
         self.scene = QGraphicsScene()
@@ -71,6 +71,7 @@ class MainWindow(QMainWindow):
     def dibujar(self):
         algoritmo = self.ui.comboBox.currentText()
         self.puntos = get_puntos(self.admin)
+        grafo = Grafo()
         pen = QPen()
         pen.setWidth(2)
 #------------------------------Mostrar puntos------------------------------------------   
@@ -91,7 +92,6 @@ class MainWindow(QMainWindow):
              grafo = Grafo()
              grafo.agregar_vertices_de_particulas(self.admin)
              grafo.agregar_aristas_entre_particulas(self.admin)
-             print(grafo)
              pen = QPen()
              pen.setWidth(1)
 
@@ -126,8 +126,23 @@ class MainWindow(QMainWindow):
                         pen.setColor(color)
                         self.scene.addLine(x1+3,y1+3,x2+3,y2+3,pen)        
 #------------------------------Dijkstra--------------------------------------------                           
-        elif(algoritmo == "Dijstra"):
+        elif(algoritmo == "Dijkstra"):
                 print("Dijkstra")
+                grafo.agregar_vertices_de_particulas(self.admin)
+                grafo.agregar_aristas_entre_particulas(self.admin)
+                vertices = grafo.obtener_vertices()
+                inicio = vertices[0]
+                distancias, predecesores = dijkstra(grafo, inicio)
+                # Pintar las líneas de los caminos más cortos en rojo
+                pen = QPen(QColor(255, 0, 0))  # Rojo
+                pen.setWidth(3)
+                for nodo, predecesor in predecesores.items():
+                    if predecesor is not None:
+                        x1, y1 = nodo
+                        x2, y2 = predecesor
+                        self.scene.addLine(x1 + 3, y1 + 3, x2 + 3, y2 + 3, pen)
+                for nodo, distancia in distancias.items():
+                    print(f"Distancia más corta desde {inicio} hasta {nodo}: {distancia}")               
         elif(algoritmo == "Graficar"):
                 for particula in self.admin:
                         r = particula.red
@@ -145,8 +160,23 @@ class MainWindow(QMainWindow):
                         self.scene.addEllipse(x_origen,y_origen,6,6,pen)   #(x,y,diametro1,diametro2)
                         self.scene.addEllipse(x_destino,y_destino,6,6,pen)
                         self.scene.addLine(x_origen+3,y_origen+3,x_destino+3,y_destino+3,pen)
+        elif(algoritmo == "Kruskal"):
+            print("Kruskal")
+            grafo.agregar_vertices_de_particulas(self.admin)
+            grafo.agregar_aristas_entre_particulas(self.admin)
+            arbol_minimo = kruskal(grafo)
+            for arista in arbol_minimo:
+                origen, destino, peso = arista
+                x1, y1 = origen
+                x2, y2 = destino
+                 # Pintar las líneas de los caminos más cortos en rojo
+                pen = QPen(QColor(255, 0, 0))  # Rojo
+                pen.setWidth(3)
+                self.scene.addLine(x1 + 3, y1 + 3, x2 + 3, y2 + 3, pen)
 
-        
+            print("Aristas del árbol de expansión mínima:")
+            for arista in arbol_minimo:
+                print(f"{arista[0]} - {arista[1]}: {arista[2]}")        
     #Mostrar ordenadas en QplanTexEdit(Sort)
     @Slot()
     def ordenar_id_ascendente_qplantextedit(self):
